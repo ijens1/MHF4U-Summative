@@ -117,15 +117,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\CustQuestion.cpp" />
-    <ClCompile Include="..\..\..\..\..\Downloads\MHF4U-Summative\MHF4U-Summative\main.cpp" />
+    <ClCompile Include="..\CustomHeaders\CustQuestion.cpp" />
+    <ClCompile Include="..\Debug\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\Core.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\CustPath.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\CustQuestion.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\CustQuestionsList.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\MHF4U-Summative\CustomHeaders\CustSDLInit.h" />
+    <ClInclude Include="..\CustomHeaders\Core.h" />
+    <ClInclude Include="..\CustomHeaders\CustPath.h" />
+    <ClInclude Include="..\CustomHeaders\CustQuestion.h" />
+    <ClInclude Include="..\CustomHeaders\CustQuestionsList.h" />
+    <ClInclude Include="..\CustomHeaders\CustSDLInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
