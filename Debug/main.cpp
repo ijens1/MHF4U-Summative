@@ -43,7 +43,6 @@ check out this page to get started, it seems like it has good stuff.
 http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 
 */
-
 #include "CustSDLInit.h"
 
 int main() {
