@@ -42,6 +42,8 @@ ERROR CODES FOR MAIN:
 check out this page to get started, it seems like it has good stuff.
 http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 
+*/
+
 #include "CustSDLInit.h"
 
 int main() {
@@ -49,12 +51,8 @@ int main() {
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
 		MainQuestionList[i]->printQuestion();
 		MainQuestionList[i]->askForUserAnswer();
+		MainQuestionList[i]->askFollowUpQuestions();
 	}
 	system("PAUSE");
-	return 0;
-}
-*/
-
-int main() {
 	return 0;
 }
