@@ -70,6 +70,13 @@ int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
 		return 0;
 	}
     
+    //Initialize fonts
+    if (TTF_Init() != 0){
+        logSDLError(std::cout, "TTF_Init");
+        SDL_Quit();
+        return 1;
+    }
+    
     if (hardAcc && !vSync){
         MainRenderer = SDL_CreateRenderer(MainWindow, -1, SDL_RENDERER_ACCELERATED);		// various conditions for what the user wants
     }else if (!hardAcc && vSync){
@@ -141,3 +148,43 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int
 	dst.h = h;
 	SDL_RenderCopy(ren, tex, NULL, &dst);
 }
+
+/**
+ * Render the message we want to display to a texture for drawing
+ * @param message The message we want to display
+ * @param fontFile The font we want to use to render the text
+ * @param color The color we want the text to be
+ * @param fontSize The size we want the font to be
+ * @param renderer The renderer to load the texture in
+ * @return An SDL_Texture containing the rendered message, or nullptr if something went wrong
+ */
+SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
+                        SDL_Color color, int fontSize, SDL_Renderer *renderer)
+{
+    //Open the font
+    TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
+    if (font == nullptr){
+        logSDLError(std::cout, "TTF_OpenFont");
+        return nullptr;
+    }
+    
+    //We need to first render to a surface as that's what TTF_RenderText
+    //returns, then load that surface into a texture
+    SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+    if (surf == nullptr){
+        TTF_CloseFont(font);
+        logSDLError(std::cout, "TTF_RenderText");
+        return nullptr;
+    }
+    
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
+    if (texture == nullptr){
+        logSDLError(std::cout, "CreateTexture");
+    }
+    
+    //Clean up the surface and font
+    SDL_FreeSurface(surf);
+    TTF_CloseFont(font);
+    return texture;
+}
+

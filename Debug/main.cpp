@@ -48,6 +48,8 @@ http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 int main() {
 	int successfulGeneralInit = generalInit("Tutorial 1", true, true);
 	if (!successfulGeneralInit) return 1;
+    
+    //load images
 	SDL_Texture* background = loadTexture(loadPath("Images/background.png"), MainRenderer);
 	SDL_Texture* mainImage = loadTexture(loadPath("Images/image.png"), MainRenderer);
 	if (background == nullptr || mainImage == nullptr) {
@@ -56,6 +58,24 @@ int main() {
 		IMG_Quit();
 		return 2;
 	}
+    
+    //load fonts
+    SDL_Color color = { 255, 255, 255, 255 };
+    SDL_Texture *text = renderText("TEXT!!!!!", loadPath("Images/Arial Black.ttf"), color, 64, MainRenderer);
+    if (text == nullptr){
+        cleanup(MainRenderer, MainWindow);
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
+    
+    //Get the texture w/h so we can center it in the screen
+    int tW, tH;
+    SDL_QueryTexture(text, NULL, NULL, &tW, &tH);
+    int tx = SCREEN_WIDTH / 2 - tW / 2;
+    int ty = SCREEN_HEIGHT / 2 - tH / 2;
+
+    
 	int xTiles = SCREEN_WIDTH / TILE_SIZE;
 	int yTiles = SCREEN_HEIGHT / TILE_SIZE;
 
@@ -64,6 +84,8 @@ int main() {
     
     while (!quit) {
         //read in all events since last frame
+        //read anount handling key presses here:
+        //https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
                 quit = true;
@@ -86,6 +108,9 @@ int main() {
 		int x = SCREEN_WIDTH / 2 - iW / 2;
 		int y = SCREEN_HEIGHT / 2 - iH / 2;
 		renderTexture(mainImage, MainRenderer, x, y);
+        
+        //Render text
+        renderTexture(text, MainRenderer, tx, ty);
 		
 		SDL_RenderPresent(MainRenderer);
 	}
