@@ -59,7 +59,20 @@ int main() {
 	int xTiles = SCREEN_WIDTH / TILE_SIZE;
 	int yTiles = SCREEN_HEIGHT / TILE_SIZE;
 
-	for (int i = 0; i < 3; i++) {
+    SDL_Event e;
+    bool quit = false;
+    
+    while (!quit) {
+        //read in all events since last frame
+        while (SDL_PollEvent(&e)){
+            if (e.type == SDL_QUIT){
+                quit = true;
+            }
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                quit = true;
+            }
+        }
+        
 		SDL_RenderClear(MainRenderer);
 
 		for (int i = 0; i < xTiles * yTiles; i++) {
@@ -75,7 +88,6 @@ int main() {
 		renderTexture(mainImage, MainRenderer, x, y);
 		
 		SDL_RenderPresent(MainRenderer);
-		SDL_Delay(1000);
 	}
 	cleanup(MainWindow, MainRenderer, background, mainImage);
 	IMG_Quit();
