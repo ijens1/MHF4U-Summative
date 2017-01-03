@@ -6,8 +6,9 @@
 
 const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
+const int TILE_SIZE = 40;
 
-SDL_Window *MainWindow = nullptr;		// set them to null ptr
+SDL_Window *MainWindow = nullptr;	
 SDL_Renderer *MainRenderer = nullptr;
 
 
@@ -52,14 +53,19 @@ template<> inline void cleanup<SDL_Surface>(SDL_Surface *surf) {
 // if you would like an accelerated renderer, or a v-sync enabled renderer, pass true for the third and fourth parameters
 
 int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         logSDLError(std::cout, "SDL_Init");
 		return 0;
 	}
-    
+	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
+		logSDLError(std::cout, "IMG_Init");
+		SDL_Quit();
+		return 0;
+	}
 	MainWindow = SDL_CreateWindow(MainWindowName , 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);		// make the main window at 100,100 with size 640x480, and show it
 	if (MainWindow == nullptr) {
         logSDLError(std::cout, "SDL_CreateWindow");
+		IMG_Quit();
 		SDL_Quit();
 		return 0;
 	}
@@ -77,6 +83,7 @@ int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
 	if (MainRenderer == nullptr) {
         cleanup(MainWindow);
         logSDLError(std::cout, "SDL_CreateRenderer");
+		IMG_Quit();
 		SDL_Quit();
 		return 0;
 	}
@@ -90,27 +97,10 @@ int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
  * @return the loaded texture, or nullptr if something went wrong.
  */
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
-    
-    //Initialize to nullptr to avoid dangling pointer issues
-    SDL_Texture *texture = nullptr;
-    //Load the image
-    SDL_Surface *loadedImage = SDL_LoadBMP(file.c_str());
-    
-    //If the loading went ok, convert to texture and return the texture
-    if (loadedImage != nullptr){
-        
-        texture = SDL_CreateTextureFromSurface(ren, loadedImage);
-        cleanup(loadedImage);
-        
-        //Make sure converting went ok too
-        if (texture == nullptr){
-            logSDLError(std::cout, "CreateTextureFromSurface");
-        }
-    }
-    else {
-        logSDLError(std::cout, "LoadBMP");
-    }
-    
+	SDL_Texture *texture = IMG_LoadTexture(MainRenderer, file.c_str());
+	if (texture == nullptr) {
+		logSDLError(std::cout, "LoadTexture");
+	}
     return texture;
 }
 
@@ -127,8 +117,27 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
     SDL_Rect dst;
     dst.x = x;
     dst.y = y;
-    
+
     //Query the texture to get its width and height to use
     SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
     SDL_RenderCopy(ren, tex, NULL, &dst);
+}
+
+/**
+* Draw an SDL_Texture to an SDL_Renderer at position x, y, with some desired
+* width and height
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
+* @param w The width of the texture to draw
+* @param h The height of the texture to draw
+*/
+void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h) {
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
+	SDL_RenderCopy(ren, tex, NULL, &dst);
 }

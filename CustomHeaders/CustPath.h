@@ -8,10 +8,10 @@
 std::string loadPath(char* relativePath) {
 	char fullpath[1000];
 #ifdef _WIN32
-	GetFullPathName(relativePath, MAX_PATH, fullpath, NULL);		// path to image for windows
+	_fullpath(fullpath, relativePath, MAX_PATH);		// path to image for windows
 #else
-	strcpy(fullpath, relativePath); //path to image for mac
+	strcpy(fullpath, relativePath); //TODO make sure that this works for mac
 #endif
 	std::string str(fullpath);		// convert to std::string
-	return fullpath;
+	return str;
 }

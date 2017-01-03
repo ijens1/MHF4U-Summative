@@ -37,7 +37,7 @@ DON'T FORGET TO FREE MEMORY WHEN DONE USING IT.
 ERROR CODES FOR MAIN:
 0: Successful run of program
 1: Failed to complete generalInit function
-2: failed to load texture
+2: failed to load texture or surface
 
 check out this page to get started, it seems like it has good stuff.
 http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
@@ -46,12 +46,39 @@ http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 #include "CustSDLInit.h"
 
 int main() {
-	fillAndRandomizeQList();
-	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
-		MainQuestionList[i]->printQuestion();
-		MainQuestionList[i]->askForUserAnswer();
-		MainQuestionList[i]->askFollowUpQuestions();
+	int successfulGeneralInit = generalInit("Tutorial 1", true, true);
+	if (!successfulGeneralInit) return 1;
+	SDL_Texture* background = loadTexture(loadPath("Images/background.png"), MainRenderer);
+	SDL_Texture* mainImage = loadTexture(loadPath("Images/image.png"), MainRenderer);
+	if (background == nullptr || mainImage == nullptr) {
+		cleanup(MainWindow, MainRenderer, background, mainImage);
+		SDL_Quit();
+		IMG_Quit();
+		return 2;
 	}
-	system("PAUSE");
+	int xTiles = SCREEN_WIDTH / TILE_SIZE;
+	int yTiles = SCREEN_HEIGHT / TILE_SIZE;
+
+	for (int i = 0; i < 3; i++) {
+		SDL_RenderClear(MainRenderer);
+
+		for (int i = 0; i < xTiles * yTiles; i++) {
+			int x = i % xTiles;
+			int y = i / xTiles;
+			renderTexture(background, MainRenderer, x * TILE_SIZE, y * TILE_SIZE);
+		}
+
+		int iW, iH;
+		SDL_QueryTexture(mainImage, NULL, NULL, &iW, &iH);
+		int x = SCREEN_WIDTH / 2 - iW / 2;
+		int y = SCREEN_HEIGHT / 2 - iH / 2;
+		renderTexture(mainImage, MainRenderer, x, y);
+		
+		SDL_RenderPresent(MainRenderer);
+		SDL_Delay(1000);
+	}
+	cleanup(MainWindow, MainRenderer, background, mainImage);
+	IMG_Quit();
+	SDL_Quit();
 	return 0;
 }
