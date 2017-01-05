@@ -17,6 +17,16 @@ Note the spaces after each comma.
 
 Mathematical Syntax:
 
+division should use a forward slash, not a backslash: 				(expression) / (expression)
+*always use brackets around both expressions, and add spaces between the forward slash and each expression*
+
+multiplication should be written as follows:			(expression)(expression)
+*always use brackets around both expressions, and there should be no space in between the brackets*
+This use of multiplication should always be followed unless entering coefficients to a variable.
+
+addition and subtraction should be written as follows if either expressions is more complex than a single number:			(expression) +/- (expression)
+*ALWAYS use brackets on both expressions even if only one of them is more complex than a single number. Use one space between the operator and each expression*
+
 logarithms should be written as : 		log(expression) 
 *always use the brackets around the expression*
 
@@ -25,6 +35,8 @@ exponents should be written as : 		(expression)^(expression)
 
 trigonometric functions should be written as : 		sin(expression) 	cos(expression)	    tan(expression)
 *always use brackets for the expression to which the trig function is being applied*
+
+
 
 
 
