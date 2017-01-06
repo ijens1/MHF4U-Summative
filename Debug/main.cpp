@@ -194,6 +194,6 @@ int playBriefing(SDL_Event e){
         SDL_RenderPresent(MainRenderer);
     }
     
-    cleanup(brief, mugshot);
+    cleanup(brief, mugshot, title, instructions);
     return 0;
 }
