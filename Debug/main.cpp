@@ -45,6 +45,8 @@ http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 */
 #include "CustSDLInit.h"
 
+int playBriefing(SDL_Event e);
+
 int main() {
 	int successfulGeneralInit = generalInit("Tutorial 1", true, true);
 	if (!successfulGeneralInit) return 1;
@@ -69,15 +71,6 @@ int main() {
         return 1;
     }
     
-    //load music
-    Mix_Chunk *brief = loadChunk(loadPath("Images/Briefing.wav"));
-    if (brief == nullptr){
-        cleanup(MainWindow, MainRenderer, background, mainImage, text);
-        TTF_Quit();
-        SDL_Quit();
-        return 1;
-    }
-    
     //Get the texture w/h so we can center it in the screen
     int tW, tH;
     SDL_QueryTexture(text, NULL, NULL, &tW, &tH);
@@ -91,8 +84,10 @@ int main() {
     SDL_Event e;
     bool quit = false;
     
-    //play brief
-    if( Mix_PlayChannel( -1, brief, 0 ) == -1 ){
+    if (playBriefing(e) == 1){
+        cleanup(MainWindow, MainRenderer, background, mainImage, text);
+        TTF_Quit();
+        SDL_Quit();
         return 1;
     }
     
@@ -128,8 +123,77 @@ int main() {
 		
 		SDL_RenderPresent(MainRenderer);
 	}
-	cleanup(MainWindow, MainRenderer, background, mainImage, text, brief);
+	cleanup(MainWindow, MainRenderer, background, mainImage, text);
 	IMG_Quit();
 	SDL_Quit();
 	return 0;
+}
+
+int playBriefing(SDL_Event e){
+    bool cont = false;
+    //load music
+    Mix_Chunk *brief = loadChunk(loadPath("Images/Briefing.wav"));
+    if (brief == nullptr){
+        return 1;
+    }
+    
+    //load image
+    SDL_Texture* mugshot = loadTexture(loadPath("Images/Mug Shot.jpg"), MainRenderer);
+    if (mugshot == nullptr) {
+        cleanup(brief);
+        return 1;
+    }
+    
+    //load fonts
+    SDL_Color color = { 0, 255, 0, 255 };
+    SDL_Texture *title = renderText("Briefing", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 1000);
+    SDL_Texture *instructions = renderText("Press Enter to Continue", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 1000);
+    if (title == nullptr || instructions == nullptr){
+        cleanup(mugshot, brief);
+        return 1;
+    }
+    
+    //Calculate text positions
+    int tw, iw;
+    SDL_QueryTexture(title, NULL, NULL, &tw, NULL);
+    SDL_QueryTexture(instructions, NULL, NULL, &iw, NULL);
+    int tx = SCREEN_WIDTH / 2 - tw / 2;
+    int ix = SCREEN_WIDTH / 2 - iw / 2;
+    
+    //play brief
+    if( Mix_PlayChannel( -1, brief, 0 ) == -1 ){
+        return 2;
+    }
+    
+    while (!cont){
+        while (SDL_PollEvent(&e)){
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN){
+                cont = true;
+            }
+        }
+        
+        SDL_SetRenderDrawColor( MainRenderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderClear(MainRenderer);
+        
+        int iW, iH;
+        SDL_QueryTexture(mugshot, NULL, NULL, &iW, &iH);
+        int x = SCREEN_WIDTH / 2 - iW / 2;
+        int y = SCREEN_HEIGHT / 2 - iH / 2;
+        
+        //render outline to image
+        SDL_Rect fillRect = { x-5, y-5, iW + 10, iH + 10 };
+        SDL_SetRenderDrawColor( MainRenderer, 0x00, 0xFF, 0x00, 0xFF );
+        SDL_RenderFillRect( MainRenderer, &fillRect );
+        
+        renderTexture(mugshot, MainRenderer, x, y);
+        
+        //render text
+        renderTexture(title, MainRenderer, tx, 10);
+        renderTexture(instructions, MainRenderer, ix, SCREEN_HEIGHT - y + 10);
+        
+        SDL_RenderPresent(MainRenderer);
+    }
+    
+    cleanup(brief, mugshot);
+    return 0;
 }
