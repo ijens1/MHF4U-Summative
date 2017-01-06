@@ -48,6 +48,11 @@ template<> inline void cleanup<SDL_Surface>(SDL_Surface *surf) {
         return;
     SDL_FreeSurface(surf);
 }
+template<> inline void cleanup<Mix_Chunk>(Mix_Chunk *chunk) {
+    if (!chunk)
+        return;
+    Mix_FreeChunk(chunk);
+}
 
 //This function will set a given window and renderer
 // if you would like an accelerated renderer, or a v-sync enabled renderer, pass true for the third and fourth parameters
@@ -75,6 +80,12 @@ int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
         logSDLError(std::cout, "TTF_Init");
         SDL_Quit();
         return 1;
+    }
+    
+    //Initialize SDL_mixer
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        return false;
     }
     
     if (hardAcc && !vSync){
@@ -187,5 +198,18 @@ SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
     return texture;
+}
+
+/**
+ * Loads a chunk
+ * @param file The BMP image file to load
+ * @return chunk or nullptr if something went wrong.
+ */
+Mix_Chunk* loadChunk(const std::string &file){
+    Mix_Chunk *chunk = Mix_LoadWAV(file.c_str());
+    if (chunk == nullptr) {
+        logSDLError(std::cout, "LoadChunk");
+    }
+    return chunk;
 }
 

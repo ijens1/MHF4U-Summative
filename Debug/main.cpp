@@ -63,7 +63,16 @@ int main() {
     SDL_Color color = { 255, 255, 255, 255 };
     SDL_Texture *text = renderText("lorem ipsum some more words", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 100);
     if (text == nullptr){
-        cleanup(MainRenderer, MainWindow);
+        cleanup(MainWindow, MainRenderer, background, mainImage);
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
+    
+    //load music
+    Mix_Chunk *brief = loadChunk(loadPath("Images/Briefing.wav"));
+    if (brief == nullptr){
+        cleanup(MainWindow, MainRenderer, background, mainImage, text);
         TTF_Quit();
         SDL_Quit();
         return 1;
@@ -81,6 +90,11 @@ int main() {
 
     SDL_Event e;
     bool quit = false;
+    
+    //play brief
+    if( Mix_PlayChannel( -1, brief, 0 ) == -1 ){
+        return 1;
+    }
     
     while (!quit) {
         //read in all events since last frame
@@ -114,7 +128,7 @@ int main() {
 		
 		SDL_RenderPresent(MainRenderer);
 	}
-	cleanup(MainWindow, MainRenderer, background, mainImage);
+	cleanup(MainWindow, MainRenderer, background, mainImage, text, brief);
 	IMG_Quit();
 	SDL_Quit();
 	return 0;
