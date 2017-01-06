@@ -61,7 +61,7 @@ int main() {
     
     //load fonts
     SDL_Color color = { 255, 255, 255, 255 };
-    SDL_Texture *text = renderText("TEXT!!!!!", loadPath("Images/Arial Black.ttf"), color, 64, MainRenderer);
+    SDL_Texture *text = renderText("lorem ipsum some more words", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 100);
     if (text == nullptr){
         cleanup(MainRenderer, MainWindow);
         TTF_Quit();

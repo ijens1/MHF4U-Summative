@@ -156,10 +156,11 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int
  * @param color The color we want the text to be
  * @param fontSize The size we want the font to be
  * @param renderer The renderer to load the texture in
+ * @param width Width of text before wrapping
  * @return An SDL_Texture containing the rendered message, or nullptr if something went wrong
  */
 SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
-                        SDL_Color color, int fontSize, SDL_Renderer *renderer)
+                        SDL_Color color, int fontSize, SDL_Renderer *renderer, int width)
 {
     //Open the font
     TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
@@ -170,7 +171,7 @@ SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
     
     //We need to first render to a surface as that's what TTF_RenderText
     //returns, then load that surface into a texture
-    SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+    SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, message.c_str(), color, width);
     if (surf == nullptr){
         TTF_CloseFont(font);
         logSDLError(std::cout, "TTF_RenderText");
