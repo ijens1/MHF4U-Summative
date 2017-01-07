@@ -137,7 +137,7 @@ int playBriefing(SDL_Event e){
         return 1;
     }
     
-    Image mugshot (loadPath("Images/Mug Shot.jpg"), MainRenderer, 0, 0);
+    Image mugshot(loadPath("Images/Mug Shot.jpg"), MainRenderer, 0, 0);
     
     if (!mugshot.successfullLoad()){
         cleanup(brief);

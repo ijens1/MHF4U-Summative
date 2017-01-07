@@ -4,7 +4,7 @@ Image::Image(const std::string &file, SDL_Renderer* ren, int x, int y){
     texture = IMG_LoadTexture(ren, file.c_str());
     
     if (texture == nullptr) {
-        logSDLError(std::cout, "LoadTexture");
+         std::cout << "LoadTexture" << " Error: " << SDL_GetError() << std::endl;
     }
     
     dst.x = x;
@@ -16,7 +16,7 @@ Image::Image(const std::string &file, SDL_Renderer* ren, int x, int y, int w, in
     texture = IMG_LoadTexture(ren, file.c_str());
     
     if (texture == nullptr) {
-        logSDLError(std::cout, "LoadTexture");
+        std::cout << "LoadTexture" << " Error: " << SDL_GetError() << std::endl;
     }
     
     dst.x = x;

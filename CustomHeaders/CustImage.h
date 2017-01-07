@@ -3,7 +3,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "CustSDLInit.h"
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 
 class Image{
 private:
