@@ -126,7 +126,6 @@
     <ClInclude Include="..\CustomHeaders\CustImage.h" />
     <ClInclude Include="..\CustomHeaders\CustPath.h" />
     <ClInclude Include="..\CustomHeaders\CustQuestion.h" />
-    <ClInclude Include="..\CustomHeaders\MainQuestionListInitializer.h" />
     <ClInclude Include="..\CustomHeaders\CustSDLInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,6 +6,8 @@ SYNTAX RULES FOR BREAK-IN PROGRAM
 
 General Input Syntax:
 
+Always enter solutions as numbers rather than characters or words unless otherwise specified.
+
 If entering multiple values into the computer, please use CSV (comma separated values)
 EX: If you were entering the numbers 1, 2, and 3, you should enter it exactly in the following way:
 1, 2, 3
