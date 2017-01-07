@@ -14,4 +14,5 @@
 #include <utility>
 #include "CustPath.h"
 #include "CustQuestion.h"
+#include "CustImage.h"
 #include "MainQuestionListInitializer.h"

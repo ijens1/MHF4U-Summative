@@ -137,19 +137,21 @@ int playBriefing(SDL_Event e){
         return 1;
     }
     
-    //load image
-    SDL_Texture* mugshot = loadTexture(loadPath("Images/Mug Shot.jpg"), MainRenderer);
-    if (mugshot == nullptr) {
+    Image mugshot (loadPath("Images/Mug Shot.jpg"), MainRenderer, 0, 0);
+    
+    if (!mugshot.successfullLoad()){
         cleanup(brief);
         return 1;
     }
+    
     
     //load fonts
     SDL_Color color = { 0, 255, 0, 255 };
     SDL_Texture *title = renderText("Briefing", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 1000);
     SDL_Texture *instructions = renderText("Press Enter to Continue", loadPath("Images/Arial Black.ttf"), color, 30, MainRenderer, 1000);
     if (title == nullptr || instructions == nullptr){
-        cleanup(mugshot, brief);
+        cleanup(brief);
+        mugshot.cleanup();
         return 1;
     }
     
@@ -161,10 +163,7 @@ int playBriefing(SDL_Event e){
     int instructionx = SCREEN_WIDTH / 2 - instructionW / 2;
     
     //calculate image position
-    int imageW, imageH;
-    SDL_QueryTexture(mugshot, NULL, NULL, &imageW, &imageH);
-    int imagex = SCREEN_WIDTH / 2 - imageW / 2;
-    int imagey = SCREEN_HEIGHT / 2 - imageH / 2;
+    mugshot.centre(SCREEN_WIDTH, SCREEN_HEIGHT, true, true);
     
     //play brief
     if( Mix_PlayChannel( -1, brief, 0 ) == -1 ){
@@ -184,20 +183,21 @@ int playBriefing(SDL_Event e){
         SDL_RenderClear(MainRenderer);
         
         //render outline to image
-        SDL_Rect fillRect = { imagex-5, imagey-5, imageW + 10, imageH + 10 };
+        SDL_Rect fillRect = { mugshot.getx()-5, mugshot.gety()-5, mugshot.getw()+10, mugshot.geth()+10 };
         SDL_SetRenderDrawColor( MainRenderer, 0x00, 0xFF, 0x00, 0xFF );
         SDL_RenderFillRect( MainRenderer, &fillRect );
         
         //render image
-        renderTexture(mugshot, MainRenderer, imagex, imagey);
+        mugshot.render(MainRenderer);
         
         //render text
         renderTexture(title, MainRenderer, titlex, 10);
-        renderTexture(instructions, MainRenderer, instructionx, SCREEN_HEIGHT - imagey + 10);
+        renderTexture(instructions, MainRenderer, instructionx, SCREEN_HEIGHT - mugshot.gety() + 10);
         
         SDL_RenderPresent(MainRenderer);
     }
     
-    cleanup(brief, mugshot, title, instructions);
+    cleanup(brief, title, instructions);
+    mugshot.cleanup();
     return 0;
 }
