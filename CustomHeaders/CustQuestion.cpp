@@ -1,6 +1,5 @@
 #include "CustQuestion.h"
 
-
 Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage) {
 	privQuestion = setQuestion;
 	privAnswer = setAnswer;
@@ -12,6 +11,21 @@ Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, s
 	privAnswer = setAnswer;
 	privRewardMessage = setRewardMessage;
 	followUpQuestionList = qList;
+	tries = 0;
+}
+Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, Image* setImage) {
+	privQuestion = setQuestion;
+	privAnswer = setAnswer;
+	privRewardMessage = setRewardMessage;
+	questionVisuals = setImage;
+	tries = 0;
+}
+Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, std::vector<Question*>& qList, Image* setImage) {
+	privQuestion = setQuestion;
+	privAnswer = setAnswer;
+	privRewardMessage = setRewardMessage;
+	followUpQuestionList = qList;
+	questionVisuals = setImage;
 	tries = 0;
 }
 void Question::printQuestion() {
@@ -42,3 +56,4 @@ void Question::askFollowUpQuestions() {
 		}
 	}
 }
+
