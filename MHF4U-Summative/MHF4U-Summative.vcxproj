@@ -117,11 +117,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\CustomHeaders\CustImage.cpp" />
     <ClCompile Include="..\CustomHeaders\CustQuestion.cpp" />
     <ClCompile Include="..\Debug\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CustomHeaders\Core.h" />
+    <ClInclude Include="..\CustomHeaders\CustImage.h" />
     <ClInclude Include="..\CustomHeaders\CustPath.h" />
     <ClInclude Include="..\CustomHeaders\CustQuestion.h" />
     <ClInclude Include="..\CustomHeaders\MainQuestionListInitializer.h" />

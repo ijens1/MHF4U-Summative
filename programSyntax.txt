@@ -31,7 +31,7 @@ logarithms should be written as : 		log(expression)
 *always use the brackets around the expression*
 
 exponents should be written as : 		(expression)^(expression)
-*always use brackets for both expressions*
+*always use brackets for both expressions with no spaces*
 
 trigonometric functions should be written as : 		sin(expression) 	cos(expression)	    tan(expression)
 *always use brackets for the expression to which the trig function is being applied*

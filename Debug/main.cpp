@@ -93,7 +93,7 @@ int main() {
     
     while (!quit) {
         //read in all events since last frame
-        //read anount handling key presses here:
+        //read abount handling key presses here:
         //https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
