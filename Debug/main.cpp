@@ -45,7 +45,7 @@ http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 */
 #include "CustSDLInit.h"
 
-int playBriefing(SDL_Event e);
+int playBriefing();
 
 int main() {
 	int successfulGeneralInit = generalInit("Tutorial 1", true, true);
@@ -84,7 +84,7 @@ int main() {
     SDL_Event e;
     bool quit = false;
     
-    if (playBriefing(e) == 1){
+    if (playBriefing() == 1){
         cleanup(MainWindow, MainRenderer, background, mainImage, text);
         TTF_Quit();
         SDL_Quit();
@@ -129,7 +129,9 @@ int main() {
 	return 0;
 }
 
-int playBriefing(SDL_Event e){
+int playBriefing(){
+    SDL_Event e;
+    
     bool cont = false;
     //load music
     Mix_Chunk *brief = loadChunk(loadPath("Images/Briefing.wav"));
