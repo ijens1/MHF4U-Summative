@@ -59,6 +59,9 @@ int main() {
         return 1;
     }
 
+    //set background to white
+    SDL_SetRenderDrawColor( MainRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
 		SDL_RenderClear(MainRenderer);
 		if (MainQuestionList[i]->questionVisuals != nullptr) {
