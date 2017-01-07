@@ -48,6 +48,11 @@ template<> inline void cleanup<SDL_Surface>(SDL_Surface *surf) {
         return;
     SDL_FreeSurface(surf);
 }
+template<> inline void cleanup<Mix_Chunk>(Mix_Chunk *chunk) {
+    if (!chunk)
+        return;
+    Mix_FreeChunk(chunk);
+}
 
 //This function will set a given window and renderer
 // if you would like an accelerated renderer, or a v-sync enabled renderer, pass true for the third and fourth parameters
@@ -75,6 +80,12 @@ int generalInit(const char *MainWindowName, bool hardAcc, bool vSync) {
         logSDLError(std::cout, "TTF_Init");
         SDL_Quit();
         return 1;
+    }
+    
+    //Initialize SDL_mixer
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        return false;
     }
     
     if (hardAcc && !vSync){
@@ -156,10 +167,11 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int
  * @param color The color we want the text to be
  * @param fontSize The size we want the font to be
  * @param renderer The renderer to load the texture in
+ * @param width Width of text before wrapping
  * @return An SDL_Texture containing the rendered message, or nullptr if something went wrong
  */
 SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
-                        SDL_Color color, int fontSize, SDL_Renderer *renderer)
+                        SDL_Color color, int fontSize, SDL_Renderer *renderer, int width)
 {
     //Open the font
     TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
@@ -170,7 +182,7 @@ SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
     
     //We need to first render to a surface as that's what TTF_RenderText
     //returns, then load that surface into a texture
-    SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+    SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, message.c_str(), color, width);
     if (surf == nullptr){
         TTF_CloseFont(font);
         logSDLError(std::cout, "TTF_RenderText");
@@ -186,5 +198,18 @@ SDL_Texture* renderText(const std::string &message, const std::string &fontFile,
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
     return texture;
+}
+
+/**
+ * Loads a chunk
+ * @param file The BMP image file to load
+ * @return chunk or nullptr if something went wrong.
+ */
+Mix_Chunk* loadChunk(const std::string &file){
+    Mix_Chunk *chunk = Mix_LoadWAV(file.c_str());
+    if (chunk == nullptr) {
+        logSDLError(std::cout, "LoadChunk");
+    }
+    return chunk;
 }
 
