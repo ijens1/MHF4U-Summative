@@ -154,11 +154,17 @@ int playBriefing(SDL_Event e){
     }
     
     //Calculate text positions
-    int tw, iw;
-    SDL_QueryTexture(title, NULL, NULL, &tw, NULL);
-    SDL_QueryTexture(instructions, NULL, NULL, &iw, NULL);
-    int tx = SCREEN_WIDTH / 2 - tw / 2;
-    int ix = SCREEN_WIDTH / 2 - iw / 2;
+    int titleW, instructionW;
+    SDL_QueryTexture(title, NULL, NULL, &titleW, NULL);
+    SDL_QueryTexture(instructions, NULL, NULL, &instructionW, NULL);
+    int titlex = SCREEN_WIDTH / 2 - titleW / 2;
+    int instructionx = SCREEN_WIDTH / 2 - instructionW / 2;
+    
+    //calculate image position
+    int imageW, imageH;
+    SDL_QueryTexture(mugshot, NULL, NULL, &imageW, &imageH);
+    int imagex = SCREEN_WIDTH / 2 - imageW / 2;
+    int imagey = SCREEN_HEIGHT / 2 - imageH / 2;
     
     //play brief
     if( Mix_PlayChannel( -1, brief, 0 ) == -1 ){
@@ -166,30 +172,28 @@ int playBriefing(SDL_Event e){
     }
     
     while (!cont){
+        //check if press enter
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN){
                 cont = true;
             }
         }
         
+        //clear screen to black
         SDL_SetRenderDrawColor( MainRenderer, 0x00, 0x00, 0x00, 0xFF );
         SDL_RenderClear(MainRenderer);
         
-        int iW, iH;
-        SDL_QueryTexture(mugshot, NULL, NULL, &iW, &iH);
-        int x = SCREEN_WIDTH / 2 - iW / 2;
-        int y = SCREEN_HEIGHT / 2 - iH / 2;
-        
         //render outline to image
-        SDL_Rect fillRect = { x-5, y-5, iW + 10, iH + 10 };
+        SDL_Rect fillRect = { imagex-5, imagey-5, imageW + 10, imageH + 10 };
         SDL_SetRenderDrawColor( MainRenderer, 0x00, 0xFF, 0x00, 0xFF );
         SDL_RenderFillRect( MainRenderer, &fillRect );
         
-        renderTexture(mugshot, MainRenderer, x, y);
+        //render image
+        renderTexture(mugshot, MainRenderer, imagex, imagey);
         
         //render text
-        renderTexture(title, MainRenderer, tx, 10);
-        renderTexture(instructions, MainRenderer, ix, SCREEN_HEIGHT - y + 10);
+        renderTexture(title, MainRenderer, titlex, 10);
+        renderTexture(instructions, MainRenderer, instructionx, SCREEN_HEIGHT - imagey + 10);
         
         SDL_RenderPresent(MainRenderer);
     }
