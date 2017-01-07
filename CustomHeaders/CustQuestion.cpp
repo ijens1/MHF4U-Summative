@@ -34,7 +34,7 @@ void Question::printQuestion() {
 void Question::askForUserAnswer() {
 	std::string tempUserAnswer;
 	std::cout << "Enter your solution:\t" << std::endl;
-	std::cin >> tempUserAnswer;
+	std::getline(std::cin, tempUserAnswer);
 	if (tempUserAnswer == privAnswer)
 		printRewardMessage();
 	else {
