@@ -37,6 +37,14 @@ void Image::render(SDL_Renderer* ren){
     SDL_RenderCopy(ren, texture, NULL, &dst);
 }
 
+//Render with border
+void Image::renderBorder(SDL_Renderer* ren, int w, Uint8 r, Uint8 g, Uint8 b){
+    SDL_SetRenderDrawColor( ren, r, g, b, 0xFF );
+    SDL_Rect fillRect = { dst.x-w, dst.y-w,dst.w+2*w, dst.h+2*w };
+    SDL_RenderFillRect(ren, &fillRect);
+    render(ren);
+}
+
 void Image::centre(int screenW, int screenH, bool horizontal, bool vertical){
     if (horizontal){
         dst.x = screenW / 2 - dst.w / 2;

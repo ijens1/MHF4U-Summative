@@ -134,13 +134,7 @@ int playBriefing(){
         SDL_SetRenderDrawColor( MainRenderer, 0x00, 0x00, 0x00, 0xFF );
         SDL_RenderClear(MainRenderer);
         
-        //render outline to image
-        SDL_Rect fillRect = { mugshot.getx()-5, mugshot.gety()-5, mugshot.getw()+10, mugshot.geth()+10 };
-        SDL_SetRenderDrawColor( MainRenderer, 0x00, 0xFF, 0x00, 0xFF );
-        SDL_RenderFillRect( MainRenderer, &fillRect );
-        
-        //render image
-        mugshot.render(MainRenderer);
+        mugshot.renderBorder(MainRenderer, 5, 0x00, 0xFF, 0x00);
         
         //render text
         renderTexture(title, MainRenderer, titlex, 10);
