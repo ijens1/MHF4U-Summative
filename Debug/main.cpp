@@ -74,6 +74,12 @@ int main() {
 	}
     
 	cleanup(MainWindow, MainRenderer);
+    
+    //Cleanup images from questions
+    for (int i = 0; i < MainQuestionList.size(); i++){
+        MainQuestionList[i]->questionVisuals->cleanup();
+    }
+    
 	IMG_Quit();
 	SDL_Quit();
 	return 0;
