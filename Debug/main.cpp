@@ -48,7 +48,7 @@ http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 int playBriefing();
 
 int main() {
-	int successfulGeneralInit = generalInit("Tutorial 1", true, true);
+	int successfulGeneralInit = generalInit("MHF4U-Summative", true, true);
 	if (!successfulGeneralInit) return 1;
 	fillAndRandomizeQList();			
     

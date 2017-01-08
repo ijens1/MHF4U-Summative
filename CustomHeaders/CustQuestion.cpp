@@ -33,7 +33,7 @@ void Question::printQuestion() {
 }
 void Question::askForUserAnswer() {
 	std::string tempUserAnswer;
-	std::cout << "Enter your solution:\t" << std::endl;
+	std::cout << "Enter your solution \n(or simply press enter if instructed to do so by the question):\t" << std::endl;
 	std::getline(std::cin, tempUserAnswer);
 	if (tempUserAnswer == privAnswer)
 		printRewardMessage();
@@ -43,7 +43,7 @@ void Question::askForUserAnswer() {
 	}
 }
 void Question::printRewardMessage() {
-	std::cout << privRewardMessage << std::endl;
+	std::cout << privRewardMessage << std::endl << std::endl << std::endl;
 }
 bool Question::hasFollowUpQuestions() {
 	return (followUpQuestionList.size() > 0);
@@ -51,6 +51,18 @@ bool Question::hasFollowUpQuestions() {
 void Question::askFollowUpQuestions() {
 	if (hasFollowUpQuestions()) {
 		for (int i = 0; i < (int)followUpQuestionList.size(); i++) {
+			followUpQuestionList[i]->printQuestion();
+			followUpQuestionList[i]->askForUserAnswer();
+		}
+	}
+}
+void Question::askFollowUpQuestions(SDL_Window* win, SDL_Renderer* ren) {
+	if (hasFollowUpQuestions()) {
+		for (int i = 0; i < (int)followUpQuestionList.size(); i++) {
+			SDL_RenderClear(ren);
+			if (followUpQuestionList[i]->questionVisuals != nullptr) {
+				followUpQuestionList[i]->questionVisuals->render();
+			}
 			followUpQuestionList[i]->printQuestion();
 			followUpQuestionList[i]->askForUserAnswer();
 		}
