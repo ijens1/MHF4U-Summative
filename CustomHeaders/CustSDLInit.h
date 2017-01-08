@@ -225,15 +225,15 @@ void fillAndRandomizeQList() {
     
     //EXPONENTIAL AND LOGARITHMIC FUNCTION
     MainQuestionList.push_back(new Question("Lock: Spinny Lock. \nQuestion: \nMr Harriz’s llama population can be modelled by the function f(t) (see visuals window for function definition) where t is the time in years since he started the farm. However once the population reached 100,000 llamas Mr. Harriz ran out of space and had to start selling off llamas. This caused a large increase in profits and thus allowed for a large increase in his criminal activities. In how many years after he started the farm did this occur? \nThis is the first number in the combination \n Press enter to proceed to the next Question", "", "", new Image(loadPath("Images/benQ1.png"), MainRenderer, 0, 0, SCREEN_WIDTH, 89)));
-    MainQuestionList.push_back(new Question("Lock: Spinny Lock. \nQuestion: \nMr Harriz find earthquakes very annoying as they always seem to kill off his llamas. Because of this he keeps detailed records of earthquakes. Hidden in the room is a graph of all the earthquakes he has tracked. How many times more intense is the largest earthquake than the second largest?  \nThis is the second number in the combination \n Press enter to proceed to the next Question", "", "", new Image(loadPath("Images/benQ2.png"), MainRenderer, 0, 0, SCREEN_WIDTH, 242)));
+    MainQuestionList.push_back(new Question("Lock: Spinny Lock. \nQuestion: \nMr Harriz find earthquakes very annoying as they always seem to kill off his llamas. Because of this he keeps detailed records of earthquakes. Hidden in the room is a graph of all the earthquakes he has tracked. How many times more intense is the largest earthquake than the second largest?  \nThis is the second number in the combination \n Press enter to proceed to the next Question", "", "", new Image(loadPath("Images/benQ2.png"), MainRenderer, 0, 0, SCREEN_WIDTH, 178)));
     MainQuestionList.push_back(new Question("Lock: Spinny Lock. \nQuestion: \nIn order to break into Mr. Harriz’s safe you need to corrode the lock with an acid with a pH of 4.37. However all of your vials of acid are labelled with concentrations of hydrogen ions. What concentration should you use \nThis is the final number in the combination \n Press enter to proceed to the next Question", "", "", new Image(loadPath("Images/benQ3.png"), MainRenderer, 0, 0, SCREEN_WIDTH, 151)));
     
     std::random_shuffle(MainQuestionList.begin(), MainQuestionList.end());
     
     //vertically centre images
-    for (int i = 0; i < MainQuestionList.size(); i++){
+    /*for (int i = 0; i < MainQuestionList.size(); i++){
         MainQuestionList[i]->questionVisuals->centre(SCREEN_WIDTH, SCREEN_HEIGHT, false, true);
-    }
+    }*/
 }
 
 

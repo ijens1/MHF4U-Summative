@@ -59,16 +59,20 @@ int main() {
         return 1;
     }
 
-    //set background to white
-    SDL_SetRenderDrawColor( MainRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    //set background to black
+    SDL_SetRenderDrawColor( MainRenderer, 0x00, 0x00, 0x00, 0xFF );
+    
+    SDL_Color green = { 0, 255, 0, 255 };
     
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
 		SDL_RenderClear(MainRenderer);
 		if (MainQuestionList[i]->questionVisuals != nullptr) {
 			MainQuestionList[i]->questionVisuals->render(MainRenderer);
-			SDL_RenderPresent(MainRenderer);
 		}
-		MainQuestionList[i]->printQuestion();
+		//MainQuestionList[i]->printQuestion();
+        
+        MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth()+20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH-40);
+        SDL_RenderPresent(MainRenderer);
 		MainQuestionList[i]->askForUserAnswer();
 		MainQuestionList[i]->askFollowUpQuestions();			//this will only do anything if the question has any follow up questions
 	}
