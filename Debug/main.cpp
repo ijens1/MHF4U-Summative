@@ -77,11 +77,12 @@ int main() {
 		MainQuestionList[i]->askForUserAnswer();
 		MainQuestionList[i]->askFollowUpQuestions();			//this will only do anything if the question has any follow up questions
 	}
+
     
 	cleanup(MainWindow, MainRenderer);
     
     //Cleanup images from questions
-    for (int i = 0; i < MainQuestionList.size(); i++){
+    for (int i = 0; i < (int)MainQuestionList.size(); i++){
 		if (MainQuestionList[i]->questionVisuals != nullptr) {
 			MainQuestionList[i]->questionVisuals->cleanup();
 		}

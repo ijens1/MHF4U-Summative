@@ -4,21 +4,21 @@ Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage) {
 	privQuestion = setQuestion;
 	privAnswer = setAnswer;
 	privRewardMessage = setRewardMessage;
-	tries = 0;
+	prompt = "Enter your solution \n(or simply press enter if instructed to do so by the question):\t";
 }
 Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, std::vector<Question*>& qList) {
 	privQuestion = setQuestion;
 	privAnswer = setAnswer;
 	privRewardMessage = setRewardMessage;
 	followUpQuestionList = qList;
-	tries = 0;
+	prompt = "Enter your solution \n(or simply press enter if instructed to do so by the question):\t";
 }
 Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, Image* setImage) {
 	privQuestion = setQuestion;
 	privAnswer = setAnswer;
 	privRewardMessage = setRewardMessage;
 	questionVisuals = setImage;
-	tries = 0;
+	prompt = "Enter your solution \n(or simply press enter if instructed to do so by the question):\t";
 }
 Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, std::vector<Question*>& qList, Image* setImage) {
 	privQuestion = setQuestion;
@@ -26,8 +26,16 @@ Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, s
 	privRewardMessage = setRewardMessage;
 	followUpQuestionList = qList;
 	questionVisuals = setImage;
-	tries = 0;
+	prompt = "Enter your solution \n(or simply press enter if instructed to do so by the question):\t";
 }
+Question::Question(char* setQuestion, char* setAnswer, char* setRewardMessage, char* userPrompt, Image* setImage) {
+	privQuestion = setQuestion;
+	privAnswer = setAnswer;
+	privRewardMessage = setRewardMessage;
+	prompt = userPrompt;
+	questionVisuals = setImage;
+}
+
 void Question::printQuestion() {
 	std::cout << privQuestion << std::endl;
 }
@@ -72,12 +80,11 @@ void Question::renderQuestion(int x, int y, const std::string &fontFile, SDL_Col
 
 void Question::askForUserAnswer() {
 	std::string tempUserAnswer;
-	std::cout << "Enter your solution \n(or simply press enter if instructed to do so by the question):\t" << std::endl;
+	std::cout << prompt << std::endl;
 	std::getline(std::cin, tempUserAnswer);
 	if (tempUserAnswer == privAnswer)
 		printRewardMessage();
 	else {
-		tries++;
 		askForUserAnswer();
 	}
 }

@@ -14,6 +14,7 @@ public:
 	Question(char* setQuestion, char* setAnswer, char* setRewardMessage, std::vector<Question*>& qList);
 	Question(char* setQuestion, char* setAnswer, char* setRewardMessage, Image* setImage);
 	Question(char* setQuestion, char* setAnswer, char* setRewardMessage, std::vector<Question*>& qList, Image* setImage);
+	Question(char* setQuestion, char* setAnswer, char* setRewardMessage, char* userPrompt, Image* setImage);
 	void printQuestion();
     void renderQuestion(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
 	void askForUserAnswer();
@@ -21,7 +22,6 @@ public:
 private:
 	void printRewardMessage();
 	bool hasFollowUpQuestions();
-	std::string privQuestion, privAnswer, privRewardMessage;
-	int tries;
+	std::string privQuestion, privAnswer, privRewardMessage, prompt;
 	std::vector<Question*> followUpQuestionList;
 };
