@@ -247,7 +247,7 @@ void fillAndRandomizeQList() {
 	MainQuestionList.push_back(new Question("Mr Harriz has encoded the final lock combination in the expression shown above. The value of n is the year number in which he will receive his next valuable painting. Enter the value of the expression to a precision of 3 decimal places:", "0.000", "The first three decimal places of your answer is the final lock combination\"", new Image(loadPath("Images/isaacQ4.png"), MainRenderer, 0, 0, SCREEN_WIDTH, 315)));
 	
 	//Debrief
-	MainQuestionList.push_back(new Question("You discover, inside the final box, along with Mr. Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.", "", "", "",));
+	//MainQuestionList.push_back(new Question("You discover, inside the final box, along with Mr. Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.", "", "", "",));
 }
 
 
