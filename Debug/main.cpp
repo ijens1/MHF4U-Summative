@@ -1,4 +1,5 @@
 /* 
+ALL CREDIT FOR THE 'Mona Harriza' PHOTO GOES TO RIZVI RAB
 MHF4U-Summative.
 Written By: John Phillips, Isaac Jensen-Large, Benjamin Wilkins
 Start Date: 2016-12-26
@@ -74,10 +75,18 @@ int main() {
 			MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
 		}
         SDL_RenderPresent(MainRenderer);
+		std::cout << "****************************************************************" << std::endl << std::endl;
 		MainQuestionList[i]->askForUserAnswer();
 		MainQuestionList[i]->askFollowUpQuestions();			//this will only do anything if the question has any follow up questions
 	}
-
+	SDL_RenderClear(MainRenderer);
+	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);
+	std::cout << std::endl  << std::endl << "You discover, inside the final box, along with Mr.Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.\"" << std::endl;
+	monaHarriza->centre(SCREEN_WIDTH, SCREEN_HEIGHT, true, false);
+	monaHarriza->render(MainRenderer);
+	SDL_RenderPresent(MainRenderer);
+	system("PAUSE");
+	monaHarriza->cleanup();
     
 	cleanup(MainWindow, MainRenderer);
     
