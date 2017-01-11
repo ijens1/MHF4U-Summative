@@ -67,18 +67,21 @@ int main() {
     
     std::string inputText;
     SDL_Event e;
-    bool renderTextFlag;
+    bool renderTextFlag, breakFlag = false;
     
     SDL_Texture *inputTexture;
     
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
-        while (true){
+        renderTextFlag = true;
+        breakFlag = false;
+        inputText = "";
+        while (!breakFlag){
             //Handle Evvent/Read input
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_KEYDOWN){
                     if(e.key.keysym.sym == SDLK_RETURN){
                         if (MainQuestionList[i]->checkAnswer(inputText)){
-                            std::cout << "YAY" << std::endl; //FIX THIS
+                            breakFlag = true;
                         }else{
                             inputText = "";
                             renderTextFlag = true;
@@ -99,26 +102,63 @@ int main() {
                 }
             }
             
-            //Render shit
-            SDL_RenderClear(MainRenderer);
-            if (MainQuestionList[i]->questionVisuals != nullptr) {
-                MainQuestionList[i]->questionVisuals->render(MainRenderer);
-                MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
-            }
-            else {
-                MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
-            }
-            if (inputText != ""){
-                inputTexture = renderText(inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
-            }else{
-                inputTexture = renderText(" ", loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+            if (renderTextFlag){
+                //Render shit
+                SDL_RenderClear(MainRenderer);
+                if (MainQuestionList[i]->questionVisuals != nullptr) {
+                    MainQuestionList[i]->questionVisuals->render(MainRenderer);
+                    MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+                }
+                else {
+                    MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+                }
+                if (inputText != ""){
+                    inputTexture = renderText(inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+                }else{
+                    inputTexture = renderText(" ", loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
 
-            }
-            //FIX THIS: correct coordinates
-            renderTexture(inputTexture, MainRenderer, 50, 50);
+                }
+                //FIX THIS: correct coordinates
+                renderTexture(inputTexture, MainRenderer, 50, 50);
             
-            SDL_RenderPresent(MainRenderer);
+                SDL_RenderPresent(MainRenderer);
+                renderTextFlag = true;
+            }
         }
+            
+        //Render shit
+        SDL_RenderClear(MainRenderer);
+        if (MainQuestionList[i]->questionVisuals != nullptr) {
+            MainQuestionList[i]->questionVisuals->render(MainRenderer);
+            MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+        }
+        else {
+            MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+        }
+        if (inputText != ""){
+            inputTexture = renderText(inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+        }else{
+            inputTexture = renderText(" ", loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+            
+        }
+        //FIX THIS: correct coordinates
+        renderTexture(inputTexture, MainRenderer, 50, 50);
+        
+        //FIX THIS: correct corrdinates
+        MainQuestionList[i]->renderRewardMessage(100, 100, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 100);
+        
+        SDL_RenderPresent(MainRenderer);
+        
+        //Wait for user to press enter
+        breakFlag= false;
+        while (!breakFlag){
+            while (SDL_PollEvent(&e)){
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN){
+                    breakFlag = true;
+                }
+            }
+        }
+
 	}
 	SDL_RenderClear(MainRenderer);
 	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);
