@@ -65,27 +65,60 @@ int main() {
     
     SDL_Color green = { 0, 255, 0, 255 };
     
+    std::string inputText;
+    SDL_Event e;
+    bool renderTextFlag;
+    
+    SDL_Texture *inputTexture;
+    
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
-		SDL_RenderClear(MainRenderer);
-		if (MainQuestionList[i]->questionVisuals != nullptr) {
-			MainQuestionList[i]->questionVisuals->render(MainRenderer);
-			MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
-		}
-		else {
-			MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
-		}
-        SDL_RenderPresent(MainRenderer);
-		std::cout << "****************************************************************" << std::endl << std::endl;
-		///MainQuestionList[i]->askForUserAnswer();
-		SDL_Event evt;
-		bool programrunning = true;
-		while (programrunning)
-		{
-			SDL_WaitEvent(&evt);
-			if (evt.type == SDL_QUIT)
-				programrunning = false;
-		}
-		//MainQuestionList[i]->askFollowUpQuestions();			//this will only do anything if the question has any follow up questions
+        while (true){
+            //Handle Evvent/Read input
+            while (SDL_PollEvent(&e)){
+                if (e.type == SDL_KEYDOWN){
+                    if(e.key.keysym.sym == SDLK_RETURN){
+                        if (MainQuestionList[i]->checkAnswer(inputText)){
+                            std::cout << "YAY" << std::endl; //FIX THIS
+                        }else{
+                            inputText = "";
+                            renderTextFlag = true;
+                        }
+                    }else if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 ){
+                        //lop off character
+                        inputText.pop_back();
+                        renderTextFlag = true;
+                    }
+                }else if( e.type == SDL_TEXTINPUT ){
+                    //Not copy or pasting
+                    if( !( ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) && ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) && SDL_GetModState() & KMOD_CTRL ) )
+                    {
+                        //Append character
+                        inputText += e.text.text;
+                        renderTextFlag = true;
+                    }
+                }
+            }
+            
+            //Render shit
+            SDL_RenderClear(MainRenderer);
+            if (MainQuestionList[i]->questionVisuals != nullptr) {
+                MainQuestionList[i]->questionVisuals->render(MainRenderer);
+                MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+            }
+            else {
+                MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+            }
+            if (inputText != ""){
+                inputTexture = renderText(inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+            }else{
+                inputTexture = renderText(" ", loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH -100);
+
+            }
+            //FIX THIS: correct coordinates
+            renderTexture(inputTexture, MainRenderer, 50, 50);
+            
+            SDL_RenderPresent(MainRenderer);
+        }
 	}
 	SDL_RenderClear(MainRenderer);
 	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);

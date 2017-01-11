@@ -18,8 +18,8 @@ public:
 	void printQuestion();
     void renderQuestion(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
     void renderRewardMessage(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
-	void askForUserAnswer(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
-	void askFollowUpQuestions();
+    void askFollowUpQuestions();
+    bool checkAnswer(std::string answer);
 private:
 	void printRewardMessage();
 	bool hasFollowUpQuestions();
