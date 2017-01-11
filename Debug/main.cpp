@@ -76,7 +76,6 @@ int main() {
 		}
         SDL_RenderPresent(MainRenderer);
 		std::cout << "****************************************************************" << std::endl << std::endl;
-		///MainQuestionList[i]->askForUserAnswer();
 		SDL_Event evt;
 		bool programrunning = true;
 		while (programrunning)
@@ -85,7 +84,6 @@ int main() {
 			if (evt.type == SDL_QUIT)
 				programrunning = false;
 		}
-		//MainQuestionList[i]->askFollowUpQuestions();			//this will only do anything if the question has any follow up questions
 	}
 	SDL_RenderClear(MainRenderer);
 	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);
