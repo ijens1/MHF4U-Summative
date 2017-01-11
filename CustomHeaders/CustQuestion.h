@@ -17,7 +17,8 @@ public:
 	Question(char* setQuestion, char* setAnswer, char* setRewardMessage, char* userPrompt, Image* setImage);
 	void printQuestion();
     void renderQuestion(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
-	void askForUserAnswer();
+    void renderRewardMessage(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
+	void askForUserAnswer(int x, int y, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer, int width);
 	void askFollowUpQuestions();
 private:
 	void printRewardMessage();
