@@ -56,6 +56,7 @@ int main() {
     if (playBriefing() == 1){
         cleanup(MainWindow, MainRenderer);
         TTF_Quit();
+		IMG_Quit();
         SDL_Quit();
         return 1;
     }
@@ -65,29 +66,98 @@ int main() {
     
     SDL_Color green = { 0, 255, 0, 255 };
     
+    std::string inputText;
+    SDL_Event e;
+    bool renderTextFlag, breakFlag = false;
+    
+    SDL_Texture *inputTexture;
+    
 	for (int i = 0; i < (int)MainQuestionList.size(); i++) {
+        renderTextFlag = true;
+        breakFlag = false;
+        inputText = "";
+        while (!breakFlag){
+            //Handle Evvent/Read input
+            while (SDL_PollEvent(&e)){
+                if (e.type == SDL_KEYDOWN){
+                    if(e.key.keysym.sym == SDLK_RETURN){
+                        if (MainQuestionList[i]->checkAnswer(inputText)){
+                            breakFlag = true;
+                        }else{
+                            inputText = "";
+                            renderTextFlag = true;
+                        }
+                    }else if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 ){
+                        //lop off character
+                        inputText.pop_back();
+                        renderTextFlag = true;
+                    }
+                }else if( e.type == SDL_TEXTINPUT ){
+                    //Not copy or pasting
+                    if( !( ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) && ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) && SDL_GetModState() & KMOD_CTRL ) )
+                    {
+                        //Append character
+                        inputText += e.text.text;
+                        renderTextFlag = true;
+                    }
+				}
+				else if (e.type == SDL_QUIT) {		
+					cleanup(MainWindow, MainRenderer);
+					IMG_Quit();
+					TTF_Quit();
+					SDL_Quit();
+					return 0;
+				}
+            }
+            
+            if (renderTextFlag){
+                //Render shit
+                SDL_RenderClear(MainRenderer);
+                if (MainQuestionList[i]->questionVisuals != nullptr) {
+                    MainQuestionList[i]->questionVisuals->render(MainRenderer);
+                    MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 2) - 40);
+                }
+                else {
+                    MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 2) - 40);
+                }
+				inputTexture = renderText("Type your solution and press enter to submit \n" + inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 100);
+                renderTexture(inputTexture, MainRenderer, (SCREEN_WIDTH / 2) + 20, 20);
+            
+                SDL_RenderPresent(MainRenderer);
+                renderTextFlag = true;
+            }
+        }
+            
+        //Render shit
 		SDL_RenderClear(MainRenderer);
 		if (MainQuestionList[i]->questionVisuals != nullptr) {
 			MainQuestionList[i]->questionVisuals->render(MainRenderer);
-			MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+			MainQuestionList[i]->renderQuestion(20, MainQuestionList[i]->questionVisuals->geth() + 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 2) - 40);
 		}
 		else {
-			MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 40);
+			MainQuestionList[i]->renderQuestion(20, 20, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 2) - 40);
 		}
+		inputTexture = renderText("Type your solution and press enter to submit \n" + inputText, loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, SCREEN_WIDTH - 100);
+		renderTexture(inputTexture, MainRenderer, (SCREEN_WIDTH / 2) + 20, 20);
+        
+        //FIX THIS: correct corrdinates
+		MainQuestionList[i]->renderRewardMessage((SCREEN_WIDTH / 2) + 20, (SCREEN_HEIGHT / 2), loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 2) - 40);
+        
         SDL_RenderPresent(MainRenderer);
-		std::cout << "****************************************************************" << std::endl << std::endl;
-		SDL_Event evt;
-		bool programrunning = true;
-		while (programrunning)
-		{
-			SDL_WaitEvent(&evt);
-			if (evt.type == SDL_QUIT)
-				programrunning = false;
-		}
+        
+        //Wait for user to press enter
+        breakFlag= false;
+        while (!breakFlag){
+            while (SDL_PollEvent(&e)){
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN){
+                    breakFlag = true;
+                }
+            }
+        }
 	}
 	SDL_RenderClear(MainRenderer);
 	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);
-	std::cout << std::endl  << std::endl << "You discover, inside the final box, along with Mr.Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.\"" << std::endl;
+	//std::cout << std::endl  << std::endl << "You discover, inside the final box, along with Mr.Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.\"" << std::endl;
 	monaHarriza->centre(SCREEN_WIDTH, SCREEN_HEIGHT, true, false);
 	monaHarriza->render(MainRenderer);
 	SDL_RenderPresent(MainRenderer);
