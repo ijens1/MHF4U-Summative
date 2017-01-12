@@ -44,6 +44,9 @@ check out this page to get started, it seems like it has good stuff.
 http://www.willusher.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world
 
 */
+
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") //get rid of the console to make the program look less confusing
+
 #include "CustSDLInit.h"
 
 int playBriefing();
@@ -156,13 +159,26 @@ int main() {
         }
 	}
 	SDL_RenderClear(MainRenderer);
-	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, 478, SCREEN_HEIGHT);
-	//std::cout << std::endl  << std::endl << "You discover, inside the final box, along with Mr.Harriz\'s secret stash of candy, many letters. You open one. It reads: \"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received this piece of art a while back from a friend of mine. It reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.\"" << std::endl;
-	monaHarriza->centre(SCREEN_WIDTH, SCREEN_HEIGHT, true, false);
+	Image* monaHarriza = new Image(loadPath("Images/monaHarriza.jpg"), MainRenderer, 0, 0, SCREEN_WIDTH / 3, SCREEN_HEIGHT);
+	Image* llamaHerder = new Image(loadPath("Images/Llama Herder.jpg"), MainRenderer, 2 * (SCREEN_WIDTH / 3), 0, SCREEN_WIDTH / 3, SCREEN_HEIGHT);
 	monaHarriza->render(MainRenderer);
+	llamaHerder->render(MainRenderer);
+	monaHarriza->renderBorder(MainRenderer, 3, 0x00, 0xFF, 0x00);
+	llamaHerder->renderBorder(MainRenderer, 3, 0x00, 0xFF, 0x00);
+	SDL_RenderDrawRect(MainRenderer, NULL);
+	inputTexture = renderText("You discover, inside the final box, along with Mr. Harriz\'s secret stash of candy, many letters. You open one. It reads: \n\"Hello Mr. Harriz, I realize that it\'s been a while since we last talked. I received these pieces of art a while back from a friend of mine. They reminded me of you, so I thought you might like it. I may end up sending more in the future. \nThank you,\nJesse Wang.\"\n\n\n\nPress ENTER to close the program.", loadPath("Images/Arial Black.ttf"), green, 16, MainRenderer, (SCREEN_WIDTH / 3) - 20);
+	renderTexture(inputTexture, MainRenderer, (SCREEN_WIDTH / 3) + 10, 10);
 	SDL_RenderPresent(MainRenderer);
-	system("PAUSE");
+	breakFlag = false;
+	while (!breakFlag) {
+		while (SDL_PollEvent(&e)) {
+			if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) {
+				breakFlag = true;
+			}
+		}
+	}
 	monaHarriza->cleanup();
+	llamaHerder->cleanup();
     
 	cleanup(MainWindow, MainRenderer);
     
@@ -174,6 +190,7 @@ int main() {
     }
     
 	IMG_Quit();
+	TTF_Quit();
 	SDL_Quit();
 	return 0;
 }
